@@ -20,90 +20,110 @@ import java.util.function.Supplier;
 /**
  * Главный фасад API модификации.
  * Позволяет использовать все API методы через один импорт.
- *
+ * ══════════════════════════════════════════════════════════════════════
  * Пример использования:
  * import static org.mod.industrialtech_crafting.api.ModAPI.*;
- *
+ * ══════════════════════════════════════════════════════════════════════
  * public static final RegistryObject<Block> myBlock = machine("my_machine");
+ * ══════════════════════════════════════════════════════════════════════
  * public static final RegistryObject<Item> myIngot = ingot("my_ingot");
  */
 public class ModAPI {
 
     private static DeferredRegister<Block> BLOCKS;
     private static DeferredRegister<Item> ITEMS;
+    private static DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES;
 
-    /**
-     * Инициализация API – передайте свой реестр блоков.
-     * Вызывать один раз в конструкторе мода.
-     */
+    // ==========================================
+    // Инициализация
+    // ==========================================
+
     public static void initBlocks(DeferredRegister<Block> blocks) {
         BLOCKS = blocks;
     }
+
     public static void initItems(DeferredRegister<Item> items) {
         ITEMS = items;
     }
 
+    public static void initBlockEntities(DeferredRegister<BlockEntityType<?>> blockEntities) {
+        BLOCK_ENTITIES = blockEntities;
+    }
+
     // ==========================================
-    // Block API (используют переданный реестр)
+    // Block API (используют BLOCKS)
     // ==========================================
 
     public static RegistryObject<Block> simple(String name, Block base) {
+        checkBlocks();
         return IBlockUtils.simpleBlock(BLOCKS, name, base);
     }
 
     public static RegistryObject<Block> simple(String name) {
+        checkBlocks();
         return IBlockUtils.simpleBlock(BLOCKS, name);
     }
 
     public static RegistryObject<Block> simpleNoLoot(String name, Block base) {
+        checkBlocks();
         return IBlockUtils.simpleNoLoot(BLOCKS, name, base);
     }
 
     public static RegistryObject<Block> simpleNoLoot(String name) {
+        checkBlocks();
         return IBlockUtils.simpleNoLoot(BLOCKS, name);
     }
 
     public static <T extends Block> RegistryObject<T> register(String name, Supplier<T> blockSupplier) {
+        checkBlocks();
         return IBlockUtils.register(BLOCKS, name, blockSupplier);
     }
 
     public static <T extends Block> RegistryObject<T> register(String name, Supplier<T> blockSupplier, Rarity rarity) {
+        checkBlocks();
         return IBlockUtils.register(BLOCKS, name, blockSupplier, rarity);
     }
 
     public static RegistryObject<Block> ore(String name) {
+        checkBlocks();
         return IBlockUtils.ore(BLOCKS, name);
     }
 
     public static RegistryObject<Block> deepslateOre(String name) {
+        checkBlocks();
         return IBlockUtils.deepslateOre(BLOCKS, name);
     }
 
     public static RegistryObject<Block> netherOre(String name) {
+        checkBlocks();
         return IBlockUtils.netherOre(BLOCKS, name);
     }
 
     public static RegistryObject<Block> endOre(String name) {
+        checkBlocks();
         return IBlockUtils.endOre(BLOCKS, name);
     }
 
     public static RegistryObject<Block> machine(String name) {
+        checkBlocks();
         return IBlockUtils.machine(BLOCKS, name);
     }
 
     public static RegistryObject<Block> heavyMachine(String name) {
+        checkBlocks();
         return IBlockUtils.heavyMachine(BLOCKS, name);
     }
 
     // ==========================================
-    // BlockEntity API (пока без изменений)
+    // BlockEntity API (используют BLOCK_ENTITIES)
     // ==========================================
 
     public static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> blockEntity(
             String name,
             BlockEntityType.BlockEntitySupplier<T> factory,
             Supplier<? extends Block> block) {
-        return IBlockEntityUtils.registerEntities(name, factory, block);
+        checkBlockEntities();
+        return IBlockEntityUtils.registerEntities(BLOCK_ENTITIES, name, factory, block);
     }
 
     @SafeVarargs
@@ -111,67 +131,81 @@ public class ModAPI {
             String name,
             BlockEntityType.BlockEntitySupplier<T> factory,
             Supplier<? extends Block>... blocks) {
-        return IBlockEntityUtils.registerEntities(name, factory, blocks);
+        checkBlockEntities();
+        return IBlockEntityUtils.registerEntities(BLOCK_ENTITIES, name, factory, blocks);
     }
 
     // ==========================================
-    // Item API (используют глобальный IItemsUtils.ITEMS)
+    // Item API (используют ITEMS)
     // ==========================================
 
     public static RegistryObject<Item> item(String name) {
-        return IItemsUtils.item(name);
+        checkItems();
+        return IItemsUtils.item(ITEMS, name);
     }
 
     public static RegistryObject<Item> itemRare(String name) {
-        return IItemsUtils.itemRare(name);
+        checkItems();
+        return IItemsUtils.itemRare(ITEMS, name);
     }
 
     public static RegistryObject<Item> itemEpic(String name) {
-        return IItemsUtils.itemEpic(name);
+        checkItems();
+        return IItemsUtils.itemEpic(ITEMS, name);
     }
 
     public static RegistryObject<Item> itemLegendary(String name) {
-        return IItemsUtils.itemLegendary(name);
+        checkItems();
+        return IItemsUtils.itemLegendary(ITEMS, name);
     }
 
     public static RegistryObject<Item> itemMythic(String name) {
-        return IItemsUtils.itemMythic(name);
+        checkItems();
+        return IItemsUtils.itemMythic(ITEMS, name);
     }
 
     public static RegistryObject<Item> material(String name) {
-        return IItemsUtils.material(name);
+        checkItems();
+        return IItemsUtils.material(ITEMS, name);
     }
 
     public static RegistryObject<Item> materialRare(String name) {
-        return IItemsUtils.materialRare(name);
+        checkItems();
+        return IItemsUtils.materialRare(ITEMS, name);
     }
 
     public static RegistryObject<Item> materialEpic(String name) {
-        return IItemsUtils.materialEpic(name);
+        checkItems();
+        return IItemsUtils.materialEpic(ITEMS, name);
     }
 
     public static RegistryObject<Item> materialLegendary(String name) {
-        return IItemsUtils.materialLegendary(name);
+        checkItems();
+        return IItemsUtils.materialLegendary(ITEMS, name);
     }
 
     public static RegistryObject<Item> materialMythic(String name) {
-        return IItemsUtils.materialMythic(name);
+        checkItems();
+        return IItemsUtils.materialMythic(ITEMS, name);
     }
 
     public static RegistryObject<Item> food(String name, FoodProperties food) {
-        return IItemsUtils.food(name, food);
+        checkItems();
+        return IItemsUtils.food(ITEMS, name, food);
     }
 
     public static RegistryObject<Item> food(String name, int nutrition, float saturation) {
-        return IItemsUtils.food(name, nutrition, saturation);
+        checkItems();
+        return IItemsUtils.food(ITEMS, name, nutrition, saturation);
     }
 
     public static RegistryObject<Item> food(String name, int nutrition, float saturation, boolean isMeat) {
-        return IItemsUtils.food(name, nutrition, saturation, isMeat);
+        checkItems();
+        return IItemsUtils.food(ITEMS, name, nutrition, saturation, isMeat);
     }
 
     // ==========================================
-    // Builder API (пока без изменений, требуют доработки)
+    // Builder API (требуют отдельной инициализации)
     // ==========================================
 
     public static BlockBuilderImpl block(String name) {
@@ -232,5 +266,27 @@ public class ModAPI {
 
     public static RegistryObject<Block> createMachine(String name, Supplier<? extends Block> blockSupplier) {
         return MachineBlockFactory.createWithGui(name, blockSupplier);
+    }
+
+    // ==========================================
+    // Проверки инициализации
+    // ==========================================
+
+    private static void checkBlocks() {
+        if (BLOCKS == null) {
+            throw new IllegalStateException("ModAPI не инициализирован для блоков! Вызовите initBlocks()");
+        }
+    }
+
+    private static void checkItems() {
+        if (ITEMS == null) {
+            throw new IllegalStateException("ModAPI не инициализирован для предметов! Вызовите initItems()");
+        }
+    }
+
+    private static void checkBlockEntities() {
+        if (BLOCK_ENTITIES == null) {
+            throw new IllegalStateException("ModAPI не инициализирован для BlockEntity! Вызовите initBlockEntities()");
+        }
     }
 }

@@ -10,9 +10,7 @@ import org.mod.industrialtech_crafting.Industrialtech_crafting;
 
 import java.util.function.Supplier;
 
-public interface IBlockEntityUtils {
-    DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Industrialtech_crafting.MOD_ID);
-
+public class IBlockEntityUtils {
     /**
      * Регистрация BlockEntityType для одного связанного блока
      * @param name имя (registry name)
@@ -20,28 +18,66 @@ public interface IBlockEntityUtils {
      * @param block связанный блок
      * @return RegistryObject<BlockEntityType<T>>
      */
-    static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> registerEntities(
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
+            DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Industrialtech_crafting.MOD_ID);
+
+    // ==========================================
+    // Вспомогательный метод регистрации
+    // ==========================================
+
+    private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> register(
+            DeferredRegister<BlockEntityType<?>> register,
             String name,
             BlockEntityType.BlockEntitySupplier<T> factory,
-            Supplier<? extends Block> block
-    ) {
-        return BLOCK_ENTITIES.register(name, () -> BlockEntityType.Builder.of(factory, block.get()).build(null));
-    };
-    /**
-     * Регистрация BlockEntityType для нескольких связанных блоков (если один тип тайла используется на нескольких блоках).
-     */
-    @SafeVarargs
-    static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> registerEntities(
-            String name,
-            BlockEntityType.BlockEntitySupplier<T> factory,
-            Supplier<? extends Block>... blocks
-    ) {
-        return BLOCK_ENTITIES.register(name, () -> {
+            Supplier<? extends Block>[] blocks) {
+        return register.register(name, () -> {
             Block[] blockArray = new Block[blocks.length];
             for (int i = 0; i < blocks.length; i++) {
                 blockArray[i] = blocks[i].get();
             }
             return BlockEntityType.Builder.of(factory, blockArray).build(null);
         });
+    }
+
+    // ==========================================
+    // Методы с глобальным реестром (без параметра)
+    // ==========================================
+
+    public static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> registerEntities(
+            String name,
+            BlockEntityType.BlockEntitySupplier<T> factory,
+            Supplier<? extends Block> block) {
+        return registerEntities(BLOCK_ENTITIES, name, factory, block);
+    }
+
+    @SafeVarargs
+    public static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> registerEntities(
+            String name,
+            BlockEntityType.BlockEntitySupplier<T> factory,
+            Supplier<? extends Block>... blocks) {
+        return registerEntities(BLOCK_ENTITIES, name, factory, blocks);
+    }
+
+    // ==========================================
+    // Методы с внешним реестром (с параметром)
+    // ==========================================
+
+    public static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> registerEntities(
+            DeferredRegister<BlockEntityType<?>> register,
+            String name,
+            BlockEntityType.BlockEntitySupplier<T> factory,
+            Supplier<? extends Block> block) {
+        @SuppressWarnings("unchecked")
+        Supplier<? extends Block>[] blocks = new Supplier[]{block};
+        return register(register, name, factory, blocks);
+    }
+
+    @SafeVarargs
+    public static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> registerEntities(
+            DeferredRegister<BlockEntityType<?>> register,
+            String name,
+            BlockEntityType.BlockEntitySupplier<T> factory,
+            Supplier<? extends Block>... blocks) {
+        return register(register, name, factory, blocks);
     }
 }

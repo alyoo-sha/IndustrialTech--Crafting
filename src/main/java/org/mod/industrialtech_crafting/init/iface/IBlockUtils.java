@@ -13,13 +13,11 @@ import net.minecraftforge.registries.RegistryObject;
 import java.util.function.Supplier;
 
 public class IBlockUtils {
-
     /**
      * ══════════════════════════════════════════════════════════════════════
      * ════════════════════════ Базовые методы регистрации ═══════════════════════
      * ══════════════════════════════════════════════════════════════════════
      */
-
     public static <T extends Block> RegistryObject<T> register(
             DeferredRegister<Block> blocks,
             String name,
@@ -108,9 +106,6 @@ public class IBlockUtils {
      * ═══════════════════════════ Технические блоки ═══════════════════════════
      * ══════════════════════════════════════════════════════════════════════
      */
-    // ═══════════════════════════════════════════════════════════════════════════
-    //  Технические блоки
-    // ═══════════════════════════════════════════════════════════════════════════
 
     public static RegistryObject<Block> machine(DeferredRegister<Block> blocks, String name) {
         return register(blocks, name, () -> new Block(
