@@ -157,14 +157,9 @@ tasks.named('jar', Jar).configure {
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")])
   }
 
-  finalizedBy 'reobfJar'
+//  finalizedBy 'reobfJar'
 }
-tasks.register('jarNoObf', Jar) {
-  archiveClassifier = 'noobf' // Добавит суффикс "-noobf" к имени файла
-  from sourceSets.main.output // Берёт скомпилированные классы
-  // Сюда можно добавить и ресурсы, если нужно
-  from sourceSets.main.resources
-}
+
 
 tasks.withType(JavaCompile).configureEach {
   options.encoding = 'UTF-8'

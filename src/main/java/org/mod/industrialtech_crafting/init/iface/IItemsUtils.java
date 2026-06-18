@@ -89,6 +89,14 @@ public class IItemsUtils {
         return register(items, name, () -> new Item(new Item.Properties().rarity(Rarity.COMMON)));
     }
 
+    public static RegistryObject<Item> itemBlock(DeferredRegister<Item> items, String name) {
+        return register(items, name, () -> new Item(new Item.Properties().rarity(Rarity.COMMON)));
+    }
+
+    public static RegistryObject<Item> customBlockRarity(DeferredRegister<Item> items, String name, Rarity rarity) {
+        return register(items, name, () -> new Item(new Item.Properties().rarity(rarity)));
+    }
+
     public static RegistryObject<Item> itemRare(DeferredRegister<Item> items, String name) {
         return register(items, name, () -> new Item(new Item.Properties().rarity(Rarity.RARE)));
     }

@@ -3,6 +3,7 @@ package org.mod.industrialtech_crafting.api.item;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
+import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import org.mod.industrialtech_crafting.init.iface.IItemsUtils;
 import org.mod.industrialtech_crafting.rarity.ModRarity;
@@ -15,6 +16,7 @@ public class ItemBuilderImpl implements IItemBuilder {
     private int maxStackSize = 64;
     private Rarity rarity = Rarity.COMMON;
     private FoodProperties foodProperties = null;
+    private DeferredRegister<Item> customItemsRegistry; // Для внешних модов
 
     private ItemBuilderImpl(String name) {
         this.name = name;
@@ -76,14 +78,24 @@ public class ItemBuilderImpl implements IItemBuilder {
         return this;
     }
 
+    /**
+     * Устанавливает реестр предметов для внешних модов.
+     */
+    public ItemBuilderImpl registry(DeferredRegister<Item> registry) {
+        this.customItemsRegistry = registry;
+        return this;
+    }
+
     @Override
     public RegistryObject<Item> build() {
         // Создаём final переменную для использования в лямбде
         final int stackSize = this.maxStackSize;
         final Rarity itemRarity = this.rarity;
         final FoodProperties food = this.foodProperties;
-        
-        return IItemsUtils.ITEMS.register(name, () -> {
+
+        DeferredRegister<Item> registry = customItemsRegistry != null ? customItemsRegistry : IItemsUtils.ITEMS;
+
+        return registry.register(name, () -> {
             Item.Properties props = new Item.Properties().stacksTo(stackSize);
             if (itemRarity != Rarity.COMMON) props.rarity(itemRarity);
             if (food != null) props.food(food);

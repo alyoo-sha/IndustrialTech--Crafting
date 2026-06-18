@@ -19,6 +19,7 @@ import java.util.function.Supplier;
 public class BlockBuilderImpl implements IBlockBuilder {
 
     private static DeferredRegister<Block> BLOCKS_REGISTRY;
+    private static DeferredRegister<Item> ITEMS_REGISTRY;
 
     /**
      * Инициализация билдера – передайте свой реестр блоков.
@@ -26,6 +27,24 @@ public class BlockBuilderImpl implements IBlockBuilder {
      */
     public static void init(DeferredRegister<Block> blocks) {
         BLOCKS_REGISTRY = blocks;
+    }
+
+    /**
+     * Инициализация билдера с реестром блоков и предметов.
+     * Вызывать один раз в конструкторе мода для внешних модов.
+     */
+    public static void init(DeferredRegister<Block> blocks, DeferredRegister<Item> items) {
+        BLOCKS_REGISTRY = blocks;
+        ITEMS_REGISTRY = items;
+    }
+
+    /**
+     * Устанавливает реестр предметов для текущего builder'а.
+     * Используется для кросс-модовой регистрации.
+     */
+    public BlockBuilderImpl items(DeferredRegister<Item> items) {
+        this.customItemsRegistry = items;
+        return this;
     }
 
     private final String name;
@@ -37,6 +56,7 @@ public class BlockBuilderImpl implements IBlockBuilder {
     private boolean noLootTable = false;
     private int maxStackSize = 64;
     private Supplier<? extends Block> customBlockSupplier;
+    private DeferredRegister<Item> customItemsRegistry; // Для внешних модов
 
     private BlockBuilderImpl(String name) {
         this.name = name;
@@ -174,10 +194,16 @@ public class BlockBuilderImpl implements IBlockBuilder {
             throw new IllegalStateException("BlockBuilderImpl не инициализирован! Вызовите BlockBuilderImpl.init(реестр) перед использованием.");
         }
 
+        // Определяем реестр предметов (приоритет: custom > static > fallback)
+        DeferredRegister<Item> itemsRegistry = customItemsRegistry != null ? customItemsRegistry : ITEMS_REGISTRY;
+        if (itemsRegistry == null) {
+            throw new IllegalStateException("BlockBuilderImpl не инициализирован для предметов! Вызовите init(blocks, items) или используйте .items(реестр)");
+        }
+
         // Если задан кастомный поставщик – используем его
         if (customBlockSupplier != null) {
             RegistryObject<Block> block = BLOCKS_REGISTRY.register(name, customBlockSupplier);
-            IItemsUtils.ITEMS.register(name,
+            itemsRegistry.register(name,
                     () -> new BlockItem(block.get(), new Item.Properties().stacksTo(maxStackSize)));
             return block;
         }
@@ -195,7 +221,7 @@ public class BlockBuilderImpl implements IBlockBuilder {
         }
 
         RegistryObject<Block> block = BLOCKS_REGISTRY.register(name, () -> new Block(properties));
-        IItemsUtils.ITEMS.register(name,
+        itemsRegistry.register(name,
                 () -> new BlockItem(block.get(), new Item.Properties().stacksTo(maxStackSize)));
         return block;
     }

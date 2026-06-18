@@ -10,18 +10,18 @@ import static org.mod.industrialtech_crafting.api.ModAPI.register;
 
 public class ModBlocks {
 
-    public static final RegistryObject<Block> LUMINESSENCE_BLOCK = register("luminessence_block", () -> new BaseBlock(SoundType.STONE, 5.0F, 10.0F, true));
-    public static final RegistryObject<Block> BLACK_IRON_BLOCK = register("black_iron_block", () -> new BaseBlock(SoundType.METAL, 5.0F, 10.0F, true));
-    public static final RegistryObject<Block> REDSTONE_INGOT_BLOCK = register("redstone_ingot_block", () -> new BaseBlock(SoundType.METAL, 5.0F, 10.0F, true));
-    public static final RegistryObject<Block> ENHANCED_REDSTONE_INGOT_BLOCK = register("enhanced_redstone_ingot_block", () -> new BaseBlock(SoundType.METAL, 5.0F, 10.0F, true), Rarity.UNCOMMON);
-    public static final RegistryObject<Block> ENDER_INGOT_BLOCK = register("ender_ingot_block", () -> new BaseBlock(SoundType.METAL, 5.0F, 10.0F, true));
-    public static final RegistryObject<Block> ENHANCED_ENDER_INGOT_BLOCK = register("enhanced_ender_ingot_block", () -> new BaseBlock(SoundType.METAL, 5.0F, 10.0F, true), Rarity.UNCOMMON);
-    public static final RegistryObject<Block> CRYSTALTINE_BLOCK = register("crystaltine_block", () -> new BaseBlock(SoundType.METAL, 5.0F, 10.0F, true), Rarity.UNCOMMON);
-//    public static final RegistryObject<Block> THE_ULTIMATE_BLOCK = register("the_ultimate_block", TheUltimateBlock::new, Rarity.EPIC);
-    public static final RegistryObject<Block> NETHER_STAR_BLOCK = register("nether_star_block", () -> new BaseBlock(SoundType.METAL, 5.0F, 10.0F, true), Rarity.UNCOMMON);
-    public static final RegistryObject<Block> FLUX_STAR_BLOCK = register("flux_star_block", () -> new BaseBlock(SoundType.METAL, 5.0F, 10.0F, true), Rarity.UNCOMMON);
-    public static final RegistryObject<Block> ENDER_STAR_BLOCK = register("ender_star_block", () -> new BaseBlock(SoundType.METAL, 5.0F, 10.0F, true), Rarity.UNCOMMON);
-
+    public static RegistryObject<Block> LUMINESSENCE_BLOCK; 
+    public static RegistryObject<Block> BLACK_IRON_BLOCK; 
+    public static RegistryObject<Block> REDSTONE_INGOT_BLOCK; 
+    public static RegistryObject<Block> ENHANCED_REDSTONE_INGOT_BLOCK;
+    public static RegistryObject<Block> ENDER_INGOT_BLOCK; 
+    public static RegistryObject<Block> ENHANCED_ENDER_INGOT_BLOCK;
+    public static RegistryObject<Block> CRYSTALTINE_BLOCK;
+    public static RegistryObject<Block> NETHER_STAR_BLOCK;
+    public static RegistryObject<Block> FLUX_STAR_BLOCK;
+    public static RegistryObject<Block> ENDER_STAR_BLOCK;
+    //    public static final RegistryObject<Block> THE_ULTIMATE_BLOCK = register("the_ultimate_block", TheUltimateBlock::new, Rarity.EPIC);
+    
 //    public static final RegistryObject<Block> FRAME = register("frame", FrameBlock::new);
 //    public static final RegistryObject<Block> PEDESTAL = register("pedestal", PedestalBlock::new);
 //    public static final RegistryObject<Block> CRAFTING_CORE = register("crafting_core", CraftingCoreBlock::new);
@@ -43,5 +43,16 @@ public class ModBlocks {
 
 
     public static void init() {
+        LUMINESSENCE_BLOCK = register("luminessence_block", () -> new BaseBlock(SoundType.STONE, 5.0F, 10.0F, true));
+        BLACK_IRON_BLOCK = register("black_iron_block", () -> new BaseBlock(SoundType.METAL, 5.0F, 10.0F, true));
+        REDSTONE_INGOT_BLOCK = register("redstone_ingot_block", () -> new BaseBlock(SoundType.METAL, 5.0F, 10.0F, true));
+        ENHANCED_REDSTONE_INGOT_BLOCK = register("enhanced_redstone_ingot_block", () -> new BaseBlock(SoundType.METAL, 5.0F, 10.0F, true), Rarity.UNCOMMON);
+        ENDER_INGOT_BLOCK = register("ender_ingot_block", () -> new BaseBlock(SoundType.METAL, 5.0F, 10.0F, true));
+        ENHANCED_ENDER_INGOT_BLOCK = register("enhanced_ender_ingot_block", () -> new BaseBlock(SoundType.METAL, 5.0F, 10.0F, true), Rarity.UNCOMMON);
+        CRYSTALTINE_BLOCK = register("crystaltine_block", () -> new BaseBlock(SoundType.METAL, 5.0F, 10.0F, true), Rarity.UNCOMMON);
+        NETHER_STAR_BLOCK = register("nether_star_block", () -> new BaseBlock(SoundType.METAL, 5.0F, 10.0F, true), Rarity.UNCOMMON);
+        FLUX_STAR_BLOCK = register("flux_star_block", () -> new BaseBlock(SoundType.METAL, 5.0F, 10.0F, true), Rarity.UNCOMMON);
+        ENDER_STAR_BLOCK = register("ender_star_block", () -> new BaseBlock(SoundType.METAL, 5.0F, 10.0F, true), Rarity.UNCOMMON);
+
     }
 }

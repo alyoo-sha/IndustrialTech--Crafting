@@ -20,10 +20,11 @@ public class IBlockUtils {
      */
     public static <T extends Block> RegistryObject<T> register(
             DeferredRegister<Block> blocks,
+            DeferredRegister<Item> itemRegister,
             String name,
             Supplier<T> blockSupplier) {
         RegistryObject<T> registered = blocks.register(name, blockSupplier);
-        IItemsUtils.ITEMS.register(
+        itemRegister.register(
                 name,
                 () -> new BlockItem(registered.get(), new Item.Properties()));
         return registered;
@@ -31,11 +32,12 @@ public class IBlockUtils {
 
     public static <T extends Block> RegistryObject<T> register(
             DeferredRegister<Block> blocks,
+            DeferredRegister<Item> itemRegister,
             String name,
             Supplier<T> blockSupplier,
             Rarity rarity) {
         RegistryObject<T> registered = blocks.register(name, blockSupplier);
-        IItemsUtils.ITEMS.register(
+        itemRegister.register(
                 name,
                 () -> new BlockItem(registered.get(), new Item.Properties().rarity(rarity)));
         return registered;
@@ -50,10 +52,11 @@ public class IBlockUtils {
 
     public static <T extends Block> RegistryObject<T> registerBlock(
             DeferredRegister<Block> register,
+            DeferredRegister<Item> items,
             String name,
             Supplier<T> block) {
         RegistryObject<T> registered = register.register(name, block);
-        IItemsUtils.ITEMS.register(
+        items.register(
                 name,
                 () -> new BlockItem(registered.get(), new Item.Properties()));
         return registered;
@@ -64,20 +67,20 @@ public class IBlockUtils {
      * ══════════════════════════════════════════════════════════════════════
      */
 
-    public static RegistryObject<Block> simpleBlock(DeferredRegister<Block> blocks, String name) {
-        return simpleBlock(blocks, name, Blocks.STONE);
+    public static RegistryObject<Block> simpleBlock(DeferredRegister<Block> blocks, DeferredRegister<Item> items, String name) {
+        return simpleBlock(blocks, items, name, Blocks.STONE);
     }
 
-    public static RegistryObject<Block> simpleBlock(DeferredRegister<Block> blocks, String name, Block baseBlock) {
-        return registerBlock(blocks, name, () -> new Block(BlockBehaviour.Properties.copy(baseBlock)));
+    public static RegistryObject<Block> simpleBlock(DeferredRegister<Block> blocks, DeferredRegister<Item> items, String name, Block baseBlock) {
+        return registerBlock(blocks, items, name, () -> new Block(BlockBehaviour.Properties.copy(baseBlock)));
     }
 
-    public static RegistryObject<Block> simpleNoLoot(DeferredRegister<Block> blocks, String name) {
-        return simpleNoLoot(blocks, name, Blocks.STONE);
+    public static RegistryObject<Block> simpleNoLoot(DeferredRegister<Block> blocks, DeferredRegister<Item> items, String name) {
+        return simpleNoLoot(blocks, items, name, Blocks.STONE);
     }
 
-    public static RegistryObject<Block> simpleNoLoot(DeferredRegister<Block> blocks, String name, Block baseBlock) {
-        return registerBlock(blocks, name,
+    public static RegistryObject<Block> simpleNoLoot(DeferredRegister<Block> blocks, DeferredRegister<Item> items, String name, Block baseBlock) {
+        return registerBlock(blocks, items, name,
                 () -> new Block(BlockBehaviour.Properties.copy(baseBlock).noLootTable()));
     }
     /**
@@ -86,29 +89,28 @@ public class IBlockUtils {
      * ══════════════════════════════════════════════════════════════════════
      */
 
-    public static RegistryObject<Block> ore(DeferredRegister<Block> blocks, String name) {
-        return createOre(blocks, name, Blocks.STONE, SoundType.STONE);
+    public static RegistryObject<Block> ore(DeferredRegister<Block> blocks, DeferredRegister<Item> items, String name) {
+        return createOre(blocks, items, name, Blocks.STONE, SoundType.STONE);
     }
 
-    public static RegistryObject<Block> deepslateOre(DeferredRegister<Block> blocks, String name) {
-        return createOre(blocks, name, Blocks.DEEPSLATE, SoundType.DEEPSLATE);
+    public static RegistryObject<Block> deepslateOre(DeferredRegister<Block> blocks, DeferredRegister<Item> items, String name) {
+        return createOre(blocks, items, name, Blocks.DEEPSLATE, SoundType.DEEPSLATE);
     }
 
-    public static RegistryObject<Block> netherOre(DeferredRegister<Block> blocks, String name) {
-        return createOre(blocks, name, Blocks.NETHERRACK, SoundType.NETHERRACK);
+    public static RegistryObject<Block> netherOre(DeferredRegister<Block> blocks, DeferredRegister<Item> items, String name) {
+        return createOre(blocks, items, name, Blocks.NETHERRACK, SoundType.NETHERRACK);
     }
 
-    public static RegistryObject<Block> endOre(DeferredRegister<Block> blocks, String name) {
-        return createOre(blocks, name, Blocks.END_STONE, SoundType.STONE);
+    public static RegistryObject<Block> endOre(DeferredRegister<Block> blocks, DeferredRegister<Item> items, String name) {
+        return createOre(blocks, items, name, Blocks.END_STONE, SoundType.STONE);
     }
     /**
      * ══════════════════════════════════════════════════════════════════════
      * ═══════════════════════════ Технические блоки ═══════════════════════════
      * ══════════════════════════════════════════════════════════════════════
      */
-
-    public static RegistryObject<Block> machine(DeferredRegister<Block> blocks, String name) {
-        return register(blocks, name, () -> new Block(
+    public static RegistryObject<Block> machine(DeferredRegister<Block> blocks, DeferredRegister<Item> items, String name) {
+        return register(blocks, items, name, () -> new Block(
                 BlockBehaviour.Properties.of()
                         .sound(SoundType.METAL)
                         .strength(5.0F, 10.0F)
@@ -116,8 +118,8 @@ public class IBlockUtils {
         ));
     }
 
-    public static RegistryObject<Block> heavyMachine(DeferredRegister<Block> blocks, String name) {
-        return register(blocks, name, () -> new Block(
+    public static RegistryObject<Block> heavyMachine(DeferredRegister<Block> blocks, DeferredRegister<Item> items, String name) {
+        return register(blocks, items, name, () -> new Block(
                 BlockBehaviour.Properties.of()
                         .sound(SoundType.METAL)
                         .strength(6.0F, 12.0F)
@@ -127,11 +129,12 @@ public class IBlockUtils {
 
     public static RegistryObject<Block> withTool(
             DeferredRegister<Block> blocks,
+            DeferredRegister<Item> items,
             String name,
             SoundType sound,
             float hardness,
             float resistance) {
-        return register(blocks, name, () -> new Block(
+        return register(blocks, items, name, () -> new Block(
                 BlockBehaviour.Properties.of()
                         .sound(sound)
                         .strength(hardness, resistance)
@@ -145,10 +148,11 @@ public class IBlockUtils {
 
     private static RegistryObject<Block> createOre(
             DeferredRegister<Block> blocks,
+            DeferredRegister<Item> items,
             String name,
             Block baseBlock,
             SoundType soundType) {
-        return registerBlock(blocks, name,
+        return registerBlock(blocks, items, name,
                 () -> new Block(BlockBehaviour.Properties.copy(baseBlock)
                         .sound(soundType)
                         .requiresCorrectToolForDrops()));

@@ -54,66 +54,77 @@ public class ModAPI {
     // Block API (используют BLOCKS)
     // ==========================================
 
-    public static RegistryObject<Block> simple(String name, Block base) {
-        checkBlocks();
-        return IBlockUtils.simpleBlock(BLOCKS, name, base);
-    }
-
     public static RegistryObject<Block> simple(String name) {
         checkBlocks();
-        return IBlockUtils.simpleBlock(BLOCKS, name);
+        checkItems();
+        return IBlockUtils.simpleBlock(BLOCKS, ITEMS, name);
+    }
+
+    public static RegistryObject<Block> simple(String name, Block base) {
+        checkBlocks();
+        checkItems();
+        return IBlockUtils.simpleBlock(BLOCKS, ITEMS, name, base);
     }
 
     public static RegistryObject<Block> simpleNoLoot(String name, Block base) {
         checkBlocks();
-        return IBlockUtils.simpleNoLoot(BLOCKS, name, base);
+        checkItems();
+        return IBlockUtils.simpleNoLoot(BLOCKS, ITEMS, name, base);
     }
 
     public static RegistryObject<Block> simpleNoLoot(String name) {
         checkBlocks();
-        return IBlockUtils.simpleNoLoot(BLOCKS, name);
+        checkItems();
+        return IBlockUtils.simpleNoLoot(BLOCKS, ITEMS, name);
     }
 
     public static <T extends Block> RegistryObject<T> register(String name, Supplier<T> blockSupplier) {
         checkBlocks();
-        return IBlockUtils.register(BLOCKS, name, blockSupplier);
+        checkItems();
+        return IBlockUtils.register(BLOCKS, ITEMS, name, blockSupplier);
     }
 
     public static <T extends Block> RegistryObject<T> register(String name, Supplier<T> blockSupplier, Rarity rarity) {
         checkBlocks();
-        return IBlockUtils.register(BLOCKS, name, blockSupplier, rarity);
+        checkItems();
+        return IBlockUtils.register(BLOCKS, ITEMS, name, blockSupplier, rarity);
     }
 
     public static RegistryObject<Block> ore(String name) {
         checkBlocks();
-        return IBlockUtils.ore(BLOCKS, name);
+        checkItems();
+        return IBlockUtils.ore(BLOCKS, ITEMS, name);
     }
 
     public static RegistryObject<Block> deepslateOre(String name) {
         checkBlocks();
-        return IBlockUtils.deepslateOre(BLOCKS, name);
+        checkItems();
+        return IBlockUtils.deepslateOre(BLOCKS, ITEMS, name);
     }
 
     public static RegistryObject<Block> netherOre(String name) {
         checkBlocks();
-        return IBlockUtils.netherOre(BLOCKS, name);
+        checkItems();
+        return IBlockUtils.netherOre(BLOCKS, ITEMS, name);
     }
 
     public static RegistryObject<Block> endOre(String name) {
         checkBlocks();
-        return IBlockUtils.endOre(BLOCKS, name);
+        checkItems();
+        return IBlockUtils.endOre(BLOCKS, ITEMS, name);
     }
 
     public static RegistryObject<Block> machine(String name) {
         checkBlocks();
-        return IBlockUtils.machine(BLOCKS, name);
+        checkItems();
+        return IBlockUtils.machine(BLOCKS, ITEMS, name);
     }
 
     public static RegistryObject<Block> heavyMachine(String name) {
         checkBlocks();
-        return IBlockUtils.heavyMachine(BLOCKS, name);
+        checkItems();
+        return IBlockUtils.heavyMachine(BLOCKS, ITEMS, name);
     }
-
     // ==========================================
     // BlockEntity API (используют BLOCK_ENTITIES)
     // ==========================================
@@ -202,6 +213,18 @@ public class ModAPI {
     public static RegistryObject<Item> food(String name, int nutrition, float saturation, boolean isMeat) {
         checkItems();
         return IItemsUtils.food(ITEMS, name, nutrition, saturation, isMeat);
+    }
+
+    // ==========================================
+    // Item API с передачей реестра (для внешних модов)
+    // ==========================================
+
+    public static RegistryObject<Item> item(DeferredRegister<Item> items, String name) {
+        return IItemsUtils.item(items, name);
+    }
+
+    public static RegistryObject<Item> material(DeferredRegister<Item> items, String name) {
+        return IItemsUtils.material(items, name);
     }
 
     // ==========================================
